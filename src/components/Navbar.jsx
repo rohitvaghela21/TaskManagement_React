@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import star from '../assets/star-half-empty.png';
+import React from 'react'
 import user from '../assets/user.png';
+import { useAuth } from '../AuthProvider';
 
 
 const Navbar = () => {
 
- 
+  const { showText} = useAuth();
+
+
   return (
     <nav>
-      <div className='heding_box'>
+      <div className={` ${showText ? 'heding_box' : 'heding_box_mini'}`}>
         <h1>Techno</h1>
         <ul>
-          <li>
-           ghjghg
-          </li>
           <li>
             <p><b>name</b></p>
             <p>Lorem ipsum dolor sit amet.</p>

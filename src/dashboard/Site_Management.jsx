@@ -1,54 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../AuthProvider";
-// import imdb from '../assets/imdb.png';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsisVertical,
-  faMagnifyingGlass,
-  faPenToSquare,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import { faEllipsisVertical, faMagnifyingGlass, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useRef, useState } from 'react'
+import { useAuth } from '../AuthProvider';
 
-const Dashboard = () => {
-  const { token, loginAction } = useAuth();
+const Site_Management = () => {
 
-  const [setPanel, setSetPanel] = useState([]);
+  const {  fetchSitePanel, setPanel,showText} = useAuth();
 
   const [show, setShow] = useState(Array(setPanel.length).fill(false));
 
-  const fetchSitePanel = async () => {
-    const response = await fetch(
-      `https://dev-backend.aquaint.co.uk/api/v1/site-panel/web-app-list?limit=10&page=1`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    const sitePanelResponse = await response.json();
-    setSetPanel(sitePanelResponse.data.list);
-
-  };
-
   useEffect(() => {
-    loginAction();
     fetchSitePanel();
   }, []);
 
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        const updatedOptions = [...show];
+        updatedOptions.fill(false);
+        setShow(updatedOptions);
+      }
+    };
 
-
-
-
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [show]);
 
   return (
     <>
-      {/* <div class="header-navbar-shadow"></div> */}
-      <Navbar />
-      <Sidebar />
-      <div className="deshbord_main">
+      <div className={`${showText ? 'deshbord_main' : 'deshbord_mini'}`} >
+        <div class="header-navbar-shadow"></div>
         <div className="management_items">
           <header className="flex items-center justify-between">
             <h2>Site Management</h2>
@@ -92,12 +76,12 @@ const Dashboard = () => {
                   <td className="py-[36px] px-[12px] w-full text-start">
                     {item.location}
                   </td>
-                  <td className="py-[36px] px-[12px] w-full text-start flex">
+                  <td className="py-[36px] px-[12px] w-full text-start flex flex-wrap">
                     {item.siteAdminList.map((it) => {
-                      return <p className="px-[5px]">{it.userDetails.firstName} {it.userDetails.lastName}</p>
+                      return <p className="user_names">{it.userDetails.firstName} {it.userDetails.lastName}</p>
                     })}
                   </td>
-                  <td className="py-[36px] px-[12px] w-full text-start relative">
+                  <td className="py-[36px] px-[12px] w-full text-start relative" ref={dropdownRef}>
                     <div
                       onClick={() => {
                         const updatedOptions = [...show];
@@ -129,17 +113,15 @@ const Dashboard = () => {
                 End of Results
               </button>
             </div>
+            
           </div>
         </div>
-
-        <ul>
-          {/* {setPanel.map((item, index) => (
-            <li key={index}>{item.name}</li>
-          ))} */}
-        </ul>
-      </div >
+      </div>
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Site_Management
+
+
+
