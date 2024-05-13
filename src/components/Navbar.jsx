@@ -17,7 +17,7 @@ const Navbar = () => {
             <p><b>name</b></p>
             <p>Lorem ipsum dolor sit amet.</p>
           </li>
-          <li className='user_logo'><img src={user} alt="" srcset="" /></li>
+          <li className='user_logo'><img src={user} alt="user logo"  /></li>
         </ul>
       </div>
 

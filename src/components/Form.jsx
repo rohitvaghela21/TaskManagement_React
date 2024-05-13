@@ -21,7 +21,7 @@ const Form = () => {
 
   const hendulSubmit = async (e) => {
     e.preventDefault();
-    console.log("formData", formData);
+    // console.log("formData", formData);
     console.log(
       "formData",
       JSON.stringify({
@@ -60,7 +60,7 @@ const Form = () => {
       <div style={{ display: "flex", height: "46vw", backgroundColor: "#E6E6E6" }}>
         <section className="form_main_img">
           <div >
-            <img src={form_main} alt="" srcset="" />
+            <img src={form_main} alt="main form" />
           </div>
         </section>
         {/* <section style={{width:"32%" , height:"100%", display:"flex" ,flexDirection:"column", alignItems:"center"}}> */}

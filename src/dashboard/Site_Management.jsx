@@ -2,16 +2,25 @@ import { faEllipsisVertical, faMagnifyingGlass, faPenToSquare, faTrash } from '@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../AuthProvider';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 
-const Site_Management = () => {
+const SiteManagement = () => {
 
-  const {  fetchSitePanel, setPanel,showText} = useAuth();
-
-  const [show, setShow] = useState(Array(setPanel.length).fill(false));
+  const {  setPage,page ,fetchSitePanel, setPanel,showText ,loginAction ,ActiveTitle} = useAuth();
 
   useEffect(() => {
-    fetchSitePanel();
+    setPage(1);
   }, []);
+
+  useEffect(() => {
+    if (page > 0) {
+    loginAction();
+    fetchSitePanel();
+    }
+  }, [page]);
+
+  const [show, setShow] = useState(Array(setPanel.length).fill(false));
 
   const dropdownRef = useRef(null);
   useEffect(() => {
@@ -31,11 +40,13 @@ const Site_Management = () => {
 
   return (
     <>
+  <Navbar />
+  <Sidebar />
       <div className={`${showText ? 'deshbord_main' : 'deshbord_mini'}`} >
-        <div class="header-navbar-shadow"></div>
-        <div className="management_items">
+        <div className="header-navbar-shadow"></div>
+        <div className="management_items w-full">
           <header className="flex items-center justify-between">
-            <h2>Site Management</h2>
+            <h2>{ActiveTitle}</h2>
             <div className="flex text-black">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
@@ -56,7 +67,7 @@ const Site_Management = () => {
             </div>
           </header>
 
-          <div className=" sites_items text-black my-[20px] ">
+          <div className="sites_items text-black my-[20px] ">
             <table className="w-full ">
               <tr className=" border-b #e5e7eb text-sm flex justify-between ">
                 <td className="py-[20px] px-[12px] w-full  text-start">Site</td>
@@ -121,7 +132,7 @@ const Site_Management = () => {
   )
 }
 
-export default Site_Management
+export default SiteManagement
 
 
 
