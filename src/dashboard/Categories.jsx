@@ -86,7 +86,7 @@ const Categories = () => {
       <Navbar />
       <Sidebar />
 
-      <div className={`${showText ? 'deshbord_main min-h-[50vw]' : 'deshbord_mini'}`} >
+      <div className={`${showText ? 'deshbord_main min-h-[50vw]' : 'deshbord_mini min-h-[50vw]'}`} >
         <div className="header-navbar-shadow"></div>
         <div className='department_items_name'>
           <header className="flex text-black mb-[10px]">
@@ -113,7 +113,7 @@ const Categories = () => {
                     }`}
                 >
                   <p><b>{dep.name}</b></p>
-                  <p>{dep.location}</p>
+                  <p className='text-[#aaaaaa] font-semibold'>{dep.location}</p>
                 </Link>
               </li>
             ))}

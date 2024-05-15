@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import logo2 from "../assets/aquaint-color-logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAngleRight,
   faBars,
   faBookmark,
   faBowlFood,
@@ -10,7 +11,6 @@ import {
   faCloudBolt,
   faCube,
   faGift,
-  faHouse,
   faList,
   faSnowflake,
   faSuitcase,
@@ -31,17 +31,13 @@ const Sidebar = () => {
   };
 
   const sidebarname = [
-    { sidename: "siteManagement", icon: faGift, sidesubname: [] },
-    { sidename: "departments", icon: faClipboard, sidesubname: [] },
-    { sidename: "staffManagement", icon: faUsers, sidesubname: [] },
-    { sidename: "templates", icon: faBookmark, sidesubname: [] },
-    { sidename: "taskManagement", icon: faSuitcase, sidesubname: [] },
-    {
-      sidename: "temperatureLogs",
-      icon: faTemperatureQuarter,
-      sidesubname: [],
-    },
-    { sidename: "categories", icon: faList, sidesubname: [] },
+    { sidename: "SiteManagement", icon: faGift, sidesubname: [] },
+    { sidename: "Departments", icon: faClipboard, sidesubname: [] },
+    { sidename: "StaffManagement", icon: faUsers, sidesubname: [] },
+    { sidename: "Templates", icon: faBookmark, sidesubname: [] },
+    { sidename: "TaskManagement", icon: faSuitcase, sidesubname: [] },
+    { sidename: "TemperatureLogs", icon: faTemperatureQuarter, sidesubname: [], },
+    { sidename: "Categories", icon: faList, sidesubname: [] },
   ];
 
   const sidesubname = [
@@ -52,18 +48,17 @@ const Sidebar = () => {
     { name: "Probes", icon: faTemperatureThreeQuarters },
   ];
 
-  
+
   const [isShow, setIsShow] = useState(false);
 
   return (
     <>
       <div className={`said_bar ${showText ? "" : "collapsed"}`}>
         <section
-          className={`${
-            showText
-              ? "compny_logo_box"
-              : "h-[110px] flex flex-col justify-evenly items-center "
-          }`}
+          className={`${showText
+            ? "compny_logo_box"
+            : "h-[110px] flex flex-col justify-evenly items-center "
+            }`}
         >
           <img
             src={showText ? logo : logo2}
@@ -82,12 +77,12 @@ const Sidebar = () => {
             {sidebarname.map((sid) => (
               <Link
                 key={sid.sidename}
-                to={`/dashboard/${sid.sidename}`}
+                to={`/dashboard/${sid.sidename.toLowerCase()}`}
                 className={`${showText ? "itme_box" : "icon-only"}
                    ${ActiveTitle === sid.sidename ? "active" : ""}`}
                 onClick={() => handleSetActiveTitle(sid.sidename)}
               >
-                <FontAwesomeIcon icon={sid.icon} className="itum py-[10px] px-[10px]"  />
+                <FontAwesomeIcon icon={sid.icon} className="itum py-[10px] px-[10px]" />
                 {showText && sid.sidename}
               </Link>
             ))}
@@ -98,23 +93,33 @@ const Sidebar = () => {
           <div className="flex flex-col py-[20px]">
             <button
               className={`${showText ? "itme_box" : "icon-only"}
-                   ${ActiveTitle == "inventory" ? "active" : ""}`}
+                   ${ActiveTitle == "Inventory" ? "active" : ""}`}
               onClick={() => {
-                handleSetActiveTitle("inventory");
+                handleSetActiveTitle("Inventory");
                 setIsShow(!isShow);
               }}
             >
+
               <FontAwesomeIcon icon={faCube} className="itum" />
-              {showText && "inventory"}
+              {showText &&
+                <>
+                  Inventory
+                  <FontAwesomeIcon icon={faAngleRight} className={`${ActiveTitle == "inventory"
+                    ? "w-[18px] h-[18px] py-[10px] px-[8px] ml-[60px] rotate-90 ease-in"
+                    : "w-[18px] h-[18px] py-[10px] px-[8px] ml-[60px] ease-in"} `}
+                  />
+                </>
+              }
             </button>
 
             {isShow &&
               sidesubname.map((sub) => (
                 <Link
                   key={sub.name}
-                  to={`/dashboard/${sub.name}`}
+                  to={`/dashboard/${sub.name.toLowerCase()}`}
                   className={`${showText ? "itme_box" : "icon-only"}
-               ${ActiveTitle == sub.name ? "active" : ""}`}
+                                ${ActiveTitle == sub.name ? "active" : ""}`
+                  }
                   onClick={() => handleSetActiveTitle(sub.name)}
                 >
                   <FontAwesomeIcon icon={sub.icon} className="itum" />

@@ -111,7 +111,7 @@ return (
                   }`}
               >
                 <p><b>{dep.name}</b></p>
-                <p>{dep.location}</p>
+                <p className='text-[#aaaaaa] font-semibold'>{dep.location}</p>
               </Link>
             </li>
           ))}
