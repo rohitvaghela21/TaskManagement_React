@@ -3,8 +3,9 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useAuth } from '../AuthProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, faMagnifyingGlass, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faEllipsisVertical, faMagnifyingGlass, faPenToSquare, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+
 
 const Departments = () => {
   const { token, setPage, page, fetchSitePanel, setPanel, showText, ActiveTitle } = useAuth();
@@ -64,7 +65,7 @@ const Departments = () => {
         updatedOptions.fill(false);
         setShow(updatedOptions);
       }
-    };
+    }; 
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -77,11 +78,91 @@ const Departments = () => {
     setPage(1);
   }, [setPage]);
 
+  const [siteName, setSiteName] = useState("");
+  const [siteLocation, setSiteLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const siteData = {
+      name: siteName,
+      location: siteLocation,
+      description: description,
+    };
+
+    try {
+      const response = await fetch("/api/sites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(siteData),
+      });
+
+      if (response.ok) {
+        alert("Site added successfully");
+        // Clear the form fields
+        setSiteName("");
+        setSiteLocation("");
+        setDescription("");
+      } else {
+        throw new Error("Failed to add site");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add site");
+    }
+  };
+
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [position, setPosition] = useState("left");
+
+  const handleClick = (event) => {
+    if (event.target.closest("#inner-element") === null) {
+      setIsVisible(false);
+    }
+    setIsVisible(true);
+    setPosition("right");
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  
+
+  const handleToggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (option) => {
+    const selectedOption = `${option.name} (${option.location})`;
+    setSelectedOption(selectedOption);
+    setIsOpen(false);
+    onChange(selectedOption);
+  };
+
+  const [isOpens, setIsOpens] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState(null);
+
+  const handleToggleDropdowns = () => {
+    setIsOpens(!isOpens);
+  };
+
+  const handleOptionsClick = (options) => {
+    setSelectedOptions(options.location);
+    setIsOpens(false);
+    onChange(options.location);
+  };
+
+
+
+
   return (
     <>
       <Navbar />
       <Sidebar />
-      <div className={`${showText ? 'deshbord_main' : 'deshbord_mini h-[60vw]'}`} >
+      <div className={`${showText ? 'deshbord_main w-[84%] absolute' : 'deshbord_mini h-[60vw] w-[95%] absolute'}`} >
         <div className="header-navbar-shadow"></div>
         <div className='department_items_name'>
           <header className="flex text-black mb-[10px]">
@@ -132,6 +213,7 @@ const Departments = () => {
               <button
                 type="button"
                 className="w-full bg-[#102B5B] text-white rounded-[5px] mx-[15px]"
+                onClick={handleClick}
               >
                 Add Department
               </button>
@@ -195,6 +277,115 @@ const Departments = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        className="add_site_data w-[30%]"
+        style={{
+          left: position === "left" ? "0" : "auto",
+          right: position === "right" ? "0" : "auto",
+          visibility: isVisible ? "visible" : "hidden",
+        }}
+      >
+        <form className="site_data_form w-[26%]" onSubmit={''}>
+          <p className=" bg-[#f8f8f8] py-[.8rem] px-[1.6rem] mb-[1rem] flex justify-between">
+            Create Departments
+            <FontAwesomeIcon
+              icon={faXmark}
+              className="w-[40px] h-[24px] text-[#625f6e]"
+              onClick={(e) => {
+                setIsVisible(false);
+              }}
+            />
+          </p>
+
+          <div className="overflow-scroll h-[100%]">
+            <ul className=" px-[1.4rem]">
+              <li className="flex flex-col mb-[1rem]">
+                <label className='mb-[.2857rem]'>Department Name:</label>
+                <input
+                  type="text"
+                  value={siteName}
+                  onChange={(event) => setSiteName(event.target.value)}
+                  className="siteName"
+                  placeholder="Enter Site Name"
+
+                />
+              </li>
+              <li className="flex flex-col mb-[1rem]">
+                <label className='mb-[.2857rem]'>Description: </label>
+                <textarea
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  placeholder="Enter Description"
+                />
+              </li>
+            </ul>
+
+            <div className="text-[#5e5873] text-[.857rem] px-[1.4rem] mb-[1rem]">
+              <label> Select Site: </label>
+              <div className="custom-select" ref={dropdownRef}>
+                <div className="custom-select__selected flex justify-between rounded-[.357rem] h-[38px]" onClick={handleToggleDropdown}>
+                  {selectedOption ? selectedOption : 'Select Site' }
+                  <FontAwesomeIcon icon={faAngleRight} className='rotate-90' />
+                </div>
+                {isOpen && (
+                  <div className="custom-select__dropdown">
+                    {setPanel.map((option) => (
+                      <div
+                        key={option.name}
+                        className="custom-select__option"
+                        onClick={() => handleOptionClick(option)}
+                      >
+                        {option.name} ({option.location})
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="text-[#5e5873] text-[.857rem] px-[1.4rem] mb-[1rem]">
+              <label> Select Users: </label>
+              <div className="custom-select" ref={dropdownRef}>
+                <div className="custom-select__selected flex justify-between rounded-[.357rem] h-[38px]" onClick={handleToggleDropdowns}>
+                  {selectedOptions ? selectedOptions : 'Select...' }
+                  <FontAwesomeIcon icon={faAngleRight} className='rotate-90' />
+                </div>
+                {isOpens && (
+                  <div className="custom-select__dropdown">
+                    {setPanel.map((options) => (
+                      <div
+                        key={options.location}
+                        className="custom-select__option"
+                        onClick={() => handleOptionsClick(options)}
+                      >
+                        {options.location}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="h-[60px]  px-[1.4rem] w-full flex items-center justify-start">
+              <button
+                type="submit"
+                className="w-[] py-[10px] px-[18px] bg-[#102B5B] text-white rounded-[5px] mx-[10px]"
+              >
+                Submit
+              </button>
+
+              <button
+                type="submit"
+                className="w-[] py-[10px] px-[18px] bg-[#ea5455!important] text-white rounded-[5px] mx-[10px]"
+              >
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        </form>
       </div>
     </>
   )

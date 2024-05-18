@@ -249,7 +249,7 @@ const SiteManagement = () => {
           visibility: isVisible ? "visible" : "hidden",
         }}
       >
-        <form className="site_data_form" onSubmit={handleSubmit}>
+        <form className="site_data_form w-[42%]" onSubmit={handleSubmit}>
           <p className=" bg-[#f8f8f8] py-[.8rem] px-[1.6rem] mb-[1rem] flex justify-between">
             New Site
             <FontAwesomeIcon
@@ -264,7 +264,7 @@ const SiteManagement = () => {
           <div className="overflow-scroll h-[100%]">
             <ul className=" px-[1.4rem]">
               <li className="flex flex-col mb-[1rem]">
-                <label>Site Name:</label>
+                <label className='mb-[.2857rem]'>Site Name:</label>
                 <input
                   type="text"
                   value={siteName}
@@ -275,7 +275,7 @@ const SiteManagement = () => {
                 />
               </li>
               <li className="flex flex-col mb-[1rem]">
-                <label>Site Location: </label>
+                <label className='mb-[.2857rem]'>Site Location: </label>
                 <input
                   type="text"
                   value={siteLocation}
@@ -285,7 +285,7 @@ const SiteManagement = () => {
                 />
               </li>
               <li className="flex flex-col mb-[1rem]">
-                <label>Description: </label>
+                <label className='mb-[.2857rem]' >Description: </label>
                 <textarea
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}

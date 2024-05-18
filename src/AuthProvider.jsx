@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState([]);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [page, setPage] = useState(1);
-  const [ActiveTitle ,setActiveTitle] = useState("siteManagement");
+  const [ActiveTitle ,setActiveTitle] = useState("SiteManagement");
 
   const navigate = useNavigate();
 

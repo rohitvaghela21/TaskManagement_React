@@ -26,10 +26,6 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   const { toggleText, showText, ActiveTitle, setActiveTitle } = useAuth();
 
-  const handleSetActiveTitle = (sidename, name) => {
-    setActiveTitle(sidename, name);
-  };
-
   const sidebarname = [
     { sidename: "SiteManagement", icon: faGift, sidesubname: [] },
     { sidename: "Departments", icon: faClipboard, sidesubname: [] },
@@ -48,6 +44,10 @@ const Sidebar = () => {
     { name: "Probes", icon: faTemperatureThreeQuarters },
   ];
 
+
+  const handleSetActiveTitle = (sidename, name) => {
+    setActiveTitle(sidename, name);
+  };
 
   const [isShow, setIsShow] = useState(false);
 
